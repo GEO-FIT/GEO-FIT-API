@@ -20,7 +20,7 @@ public class Session {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long id; // BIGINT 매핑
+    private Long id;
 
     @Column(name = "title", nullable = false, length = 255)
     private String title;
