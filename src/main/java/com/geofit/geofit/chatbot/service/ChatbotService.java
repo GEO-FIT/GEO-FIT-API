@@ -73,8 +73,6 @@ public class ChatbotService {
         );
         AiChatbotResponse aiResponse = aiClient.chatbot(aiRequest);
 
-        // TODO 소상공인 API 요청한다음에 응답보내기 (비동기로 분리, 이 트랜잭션과 별개로) province, city, district, category 활용
-
         Message botMessage = Message.builder()
             .session(session)
             .isUser(false)
