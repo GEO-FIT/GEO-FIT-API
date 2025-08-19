@@ -49,9 +49,15 @@ public class ChatbotService {
     public MessageResponse createMessage(Long sessionId, MessageRequest request) {
         Session session = sessionRepository.findById(sessionId).orElse(null);
         List<Message> messages = messageRepository.findBySessionId(sessionId);
-        String history = messages.stream()
-            .map(m -> (m.getIsUser() ? "user: " : "bot: ") + m.getContent())
-            .collect(Collectors.joining("\n"));
+        String history = "";
+
+        if (messages.isEmpty()) {
+            // TODO 제목요약 AI APi 요청 후 그 응답값으로 session의 title 갱신하기 (비동기로 분리)
+        } else {
+            history = messages.stream()
+                .map(m -> (m.getIsUser() ? "user: " : "bot: ") + m.getContent())
+                .collect(Collectors.joining("\n"));
+        }
 
         Message userMessage = Message.builder()
             .session(session)
@@ -67,7 +73,7 @@ public class ChatbotService {
         );
         AiChatbotResponse aiResponse = aiClient.chatbot(aiRequest);
 
-        // TODO : response 분기하기 (type별로)
+        // TODO 소상공인 API 요청한다음에 응답보내기 (비동기로 분리, 이 트랜잭션과 별개로) province, city, district, category 활용
 
         Message botMessage = Message.builder()
             .session(session)
@@ -75,6 +81,7 @@ public class ChatbotService {
             .content(aiResponse.content())
             .build();
         messageRepository.save(botMessage);
-        return new MessageResponse(botMessage.getContent());
+
+        return MessageResponse.from(aiResponse);
     }
 }
