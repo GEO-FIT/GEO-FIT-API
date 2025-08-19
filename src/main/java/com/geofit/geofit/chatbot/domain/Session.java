@@ -29,4 +29,8 @@ public class Session {
     private Session(String title) {
         this.title = title;
     }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
 }

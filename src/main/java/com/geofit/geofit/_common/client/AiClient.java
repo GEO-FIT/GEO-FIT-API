@@ -3,8 +3,10 @@ package com.geofit.geofit._common.client;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.geofit.geofit._common.client.dto.AiChatbotRequest;
-import com.geofit.geofit._common.client.dto.AiChatbotResponse;
+import com.geofit.geofit._common.client.dto.request.AiChatbotRequest;
+import com.geofit.geofit._common.client.dto.request.SessionNameRequest;
+import com.geofit.geofit._common.client.dto.response.AiChatbotResponse;
+import com.geofit.geofit._common.client.dto.response.SessionNameResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +22,15 @@ public class AiClient {
             .bodyValue(request)
             .retrieve()
             .bodyToMono(AiChatbotResponse.class)
+            .block();
+    }
+
+    public SessionNameResponse sessionName(SessionNameRequest request) {
+        return aiWebClient.post()
+            .uri("/session_title")
+            .bodyValue(request)
+            .retrieve()
+            .bodyToMono(SessionNameResponse.class)
             .block();
     }
 }

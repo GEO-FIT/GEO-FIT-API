@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.geofit.geofit._common.client.AiClient;
-import com.geofit.geofit._common.client.dto.AiChatbotRequest;
-import com.geofit.geofit._common.client.dto.AiChatbotResponse;
+import com.geofit.geofit._common.client.dto.request.AiChatbotRequest;
+import com.geofit.geofit._common.client.dto.request.SessionNameRequest;
+import com.geofit.geofit._common.client.dto.response.AiChatbotResponse;
+import com.geofit.geofit._common.client.dto.response.SessionNameResponse;
 import com.geofit.geofit.chatbot.domain.Message;
 import com.geofit.geofit.chatbot.domain.Session;
 import com.geofit.geofit.chatbot.dto.request.MessageRequest;
@@ -51,8 +53,10 @@ public class ChatbotService {
         List<Message> messages = messageRepository.findBySessionId(sessionId);
         String history = "";
 
-        if (messages.isEmpty()) {
-            // TODO 제목요약 AI APi 요청 후 그 응답값으로 session의 title 갱신하기 (비동기로 분리)
+        if (messages.isEmpty()) { // TODO: 비동기로 분리
+            SessionNameRequest sessionNameRequest = new SessionNameRequest(request.content());
+            SessionNameResponse sessionNameResponse = aiClient.sessionName(sessionNameRequest);
+            session.changeTitle(sessionNameResponse.content());
         } else {
             history = messages.stream()
                 .map(m -> (m.getIsUser() ? "user: " : "bot: ") + m.getContent())
