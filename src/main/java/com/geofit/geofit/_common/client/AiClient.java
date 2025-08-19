@@ -16,7 +16,7 @@ public class AiClient {
 
     public AiChatbotResponse chatbot(AiChatbotRequest request) {
         return aiWebClient.post()
-            .uri("/generate") //TODO : url 경로로 바꾸기
+            .uri("/chat/jsonl")
             .bodyValue(request)
             .retrieve()
             .bodyToMono(AiChatbotResponse.class)

@@ -1,10 +1,14 @@
 package com.geofit.geofit.chatbot.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geofit.geofit._common.client.AiClient;
+import com.geofit.geofit._common.client.dto.AiChatbotRequest;
+import com.geofit.geofit._common.client.dto.AiChatbotResponse;
 import com.geofit.geofit.chatbot.domain.Message;
 import com.geofit.geofit.chatbot.domain.Session;
 import com.geofit.geofit.chatbot.dto.request.MessageRequest;
@@ -22,6 +26,7 @@ public class ChatbotService {
 
     private final MessageRepository messageRepository;
     private final SessionRepository sessionRepository;
+    private final AiClient aiClient;
 
     public List<Session> getSessions() {
         return sessionRepository.findAll();
@@ -43,6 +48,11 @@ public class ChatbotService {
     @Transactional
     public MessageResponse createMessage(Long sessionId, MessageRequest request) {
         Session session = sessionRepository.findById(sessionId).orElse(null);
+        List<Message> messages = messageRepository.findBySessionId(sessionId);
+        String history = messages.stream()
+            .map(m -> (m.getIsUser() ? "user: " : "bot: ") + m.getContent())
+            .collect(Collectors.joining("\n"));
+
         Message userMessage = Message.builder()
             .session(session)
             .isUser(true)
@@ -50,21 +60,19 @@ public class ChatbotService {
             .build();
         messageRepository.save(userMessage);
 
-        // TODO
-        // AI 서버에 요청 보내고 응답 받기까지 대기 (응답값 형태 : 채팅 응답값 내용)
+        AiChatbotRequest aiRequest = new AiChatbotRequest(
+            sessionId,
+            history,
+            request.content()
+        );
+        AiChatbotResponse aiResponse = aiClient.chatbot(aiRequest);
 
-        // === 임시 딜레이 ===
-        try {
-            Thread.sleep(3000); // 3초 대기
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        // === AI 서버 ===
+        // TODO : response 분기하기 (type별로)
 
         Message botMessage = Message.builder()
             .session(session)
             .isUser(false)
-            .content("나중에 AI서버 응답값으로 변경")
+            .content(aiResponse.content())
             .build();
         messageRepository.save(botMessage);
         return new MessageResponse(botMessage.getContent());

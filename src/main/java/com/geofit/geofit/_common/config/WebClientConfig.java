@@ -10,7 +10,7 @@ public class WebClientConfig {
     @Bean
     public WebClient aiWebClient(WebClient.Builder builder) {
         return builder
-            .baseUrl("http://ai-server:8080") //TODO : 실제 ai URL로 바꾸기
+            .baseUrl("http://125.138.158.48:5000")
             .build();
     }
 }
