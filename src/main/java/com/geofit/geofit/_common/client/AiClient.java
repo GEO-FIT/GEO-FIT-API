@@ -27,7 +27,7 @@ public class AiClient {
 
     public SessionNameResponse sessionName(SessionNameRequest request) {
         return aiWebClient.post()
-            .uri("/session_title")
+            .uri("/api/generate-title")
             .bodyValue(request)
             .retrieve()
             .bodyToMono(SessionNameResponse.class)
