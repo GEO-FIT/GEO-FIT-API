@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.geofit.geofit.property.domain.Dong;
@@ -17,6 +17,7 @@ import com.geofit.geofit.property.domain.PropertyType;
 import com.geofit.geofit.property.dto.request.PropertyCreateRequest;
 import com.geofit.geofit.property.dto.request.PropertyUpdateAnalyzeRequest;
 import com.geofit.geofit.property.dto.request.PropertyUpdateRequest;
+import com.geofit.geofit.property.dto.response.PropertyResponse;
 import com.geofit.geofit.property.service.PropertyService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,14 @@ import lombok.RequiredArgsConstructor;
 public class PropertyController {
 
     private final PropertyService propertyService;
+
+    @GetMapping("/{propertyId}")
+    public ResponseEntity<PropertyResponse> getProperty(
+        @PathVariable Integer propertyId
+    ) {
+        PropertyResponse response = propertyService.getProperty(propertyId);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping
     public ResponseEntity<Integer> createProperty(
@@ -39,7 +48,7 @@ public class PropertyController {
     @PutMapping("/{propertyId}")
     public ResponseEntity<Void> updateProperty(
         @RequestBody PropertyUpdateRequest request,
-        @RequestParam Integer propertyId
+        @PathVariable Integer propertyId
     ) {
         propertyService.updateProperty(request, propertyId);
         return ResponseEntity.ok().build();
@@ -48,7 +57,7 @@ public class PropertyController {
     @PutMapping("/analyze/{propertyId}")
     public ResponseEntity<Void> updateAnalyze(
         @RequestBody PropertyUpdateAnalyzeRequest request,
-        @RequestParam Integer propertyId
+        @PathVariable Integer propertyId
     ) {
         propertyService.updateAnalyze(request, propertyId);
         return ResponseEntity.ok().build();

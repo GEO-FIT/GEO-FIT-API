@@ -13,6 +13,7 @@ import com.geofit.geofit.property.domain.PropertyType;
 import com.geofit.geofit.property.dto.request.PropertyCreateRequest;
 import com.geofit.geofit.property.dto.request.PropertyUpdateAnalyzeRequest;
 import com.geofit.geofit.property.dto.request.PropertyUpdateRequest;
+import com.geofit.geofit.property.dto.response.PropertyResponse;
 import com.geofit.geofit.property.repository.DongRepository;
 import com.geofit.geofit.property.repository.FloorRepository;
 import com.geofit.geofit.property.repository.PropertyImageRepository;
@@ -31,6 +32,23 @@ public class PropertyService {
     private final PropertyImageRepository propertyImageRepository;
     private final PropertyTypeRepository propertyTypeRepository;
     private final FloorRepository floorRepository;
+
+    public PropertyResponse getProperty(Integer propertyId) {
+        Property property = propertyRepository.findById(propertyId).orElse(null);
+        return PropertyResponse.from(property);
+    }
+
+    public List<Dong> getDong() {
+        return dongRepository.findAll();
+    }
+
+    public List<Floor> getFloor() {
+        return floorRepository.findAll();
+    }
+
+    public List<PropertyType> getType() {
+        return propertyTypeRepository.findAll();
+    }
 
     @Transactional
     public Integer createProperty(PropertyCreateRequest request) {
@@ -62,17 +80,5 @@ public class PropertyService {
     public void updateAnalyze(PropertyUpdateAnalyzeRequest request, Integer propertyId) {
         Property property = propertyRepository.findById(propertyId).orElse(null);
         property.updateAnalyze(request);
-    }
-
-    public List<Dong> getDong() {
-        return dongRepository.findAll();
-    }
-
-    public List<Floor> getFloor() {
-        return floorRepository.findAll();
-    }
-
-    public List<PropertyType> getType() {
-        return propertyTypeRepository.findAll();
     }
 }
