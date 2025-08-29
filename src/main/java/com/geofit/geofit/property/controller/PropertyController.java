@@ -15,6 +15,7 @@ import com.geofit.geofit.property.domain.Dong;
 import com.geofit.geofit.property.domain.Floor;
 import com.geofit.geofit.property.domain.PropertyType;
 import com.geofit.geofit.property.dto.request.PropertyCreateRequest;
+import com.geofit.geofit.property.dto.request.PropertyUpdateAnalyzeRequest;
 import com.geofit.geofit.property.dto.request.PropertyUpdateRequest;
 import com.geofit.geofit.property.service.PropertyService;
 
@@ -41,6 +42,15 @@ public class PropertyController {
         @RequestParam Integer propertyId
     ) {
         propertyService.updateProperty(request, propertyId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/analyze/{propertyId}")
+    public ResponseEntity<Void> updateAnalyze(
+        @RequestBody PropertyUpdateAnalyzeRequest request,
+        @RequestParam Integer propertyId
+    ) {
+        propertyService.updateAnalyze(request, propertyId);
         return ResponseEntity.ok().build();
     }
 

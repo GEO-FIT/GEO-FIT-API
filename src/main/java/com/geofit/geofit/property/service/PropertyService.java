@@ -11,6 +11,7 @@ import com.geofit.geofit.property.domain.Property;
 import com.geofit.geofit.property.domain.PropertyImage;
 import com.geofit.geofit.property.domain.PropertyType;
 import com.geofit.geofit.property.dto.request.PropertyCreateRequest;
+import com.geofit.geofit.property.dto.request.PropertyUpdateAnalyzeRequest;
 import com.geofit.geofit.property.dto.request.PropertyUpdateRequest;
 import com.geofit.geofit.property.repository.DongRepository;
 import com.geofit.geofit.property.repository.FloorRepository;
@@ -55,6 +56,12 @@ public class PropertyService {
     public void updateProperty(PropertyUpdateRequest request, Integer propertyId) {
         Property property = propertyRepository.findById(propertyId).orElse(null);
         property.updatePdfUrl(request.url());
+    }
+
+    @Transactional
+    public void updateAnalyze(PropertyUpdateAnalyzeRequest request, Integer propertyId) {
+        Property property = propertyRepository.findById(propertyId).orElse(null);
+        property.updateAnalyze(request);
     }
 
     public List<Dong> getDong() {

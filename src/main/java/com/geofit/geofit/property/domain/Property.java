@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.geofit.geofit.property.dto.request.PropertyUpdateAnalyzeRequest;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -74,6 +76,63 @@ public class Property {
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PropertyImage> images = new ArrayList<>();
 
+    @Column(name = "rent_position", length = 255)
+    private String rentPosition;
+
+    @Column(name = "reason1", length = 255)
+    private String reason1;
+
+    @Column(name = "reason2", length = 255)
+    private String reason2;
+
+    @Column(name = "reason3", length = 255)
+    private String reason3;
+
+    @Column(name = "economy", length = 255)
+    private String economy;
+
+    @Column(name = "demand", length = 255)
+    private String demand;
+
+    @Column(name = "environment", length = 255)
+    private String environment;
+
+    @Column(name = "rec1_type", length = 100)
+    private String rec1Type;
+
+    @Column(name = "rec1_score")
+    private Integer rec1Score;
+
+    @Column(name = "rec1_reason", length = 255)
+    private String rec1Reason;
+
+    @Column(name = "rec1_way", length = 255)
+    private String rec1Way;
+
+    @Column(name = "rec2_type", length = 100)
+    private String rec2Type;
+
+    @Column(name = "rec2_score")
+    private Integer rec2Score;
+
+    @Column(name = "rec2_reason", length = 255)
+    private String rec2Reason;
+
+    @Column(name = "rec2_way", length = 255)
+    private String rec2Way;
+
+    @Column(name = "rec3_type", length = 100)
+    private String rec3Type;
+
+    @Column(name = "rec3_score")
+    private Integer rec3Score;
+
+    @Column(name = "rec3_reason", length = 255)
+    private String rec3Reason;
+
+    @Column(name = "rec3_way", length = 255)
+    private String rec3Way;
+
     @Builder
     private Property (
         String sido,
@@ -103,5 +162,27 @@ public class Property {
 
     public void updatePdfUrl(String pdfUrl) {
         this.pdfUrl = pdfUrl;
+    }
+
+    public void updateAnalyze(PropertyUpdateAnalyzeRequest request) {
+        this.reason1 = request.reason1();
+        this.reason2 = request.reason2();
+        this.reason3 = request.reason3();
+        this.rentPosition = request.rentPosition();
+        this.economy = request.economy();
+        this.demand = request.demand();
+        this.environment = request.environment();
+        this.rec1Type = request.rec1Type();
+        this.rec1Score = request.rec1Score();
+        this.rec1Reason = request.rec1Reason();
+        this.rec1Way = request.rec1Way();
+        this.rec2Type = request.rec2Type();
+        this.rec2Score = request.rec2Score();
+        this.rec2Reason = request.rec2Reason();
+        this.rec2Way = request.rec2Way();
+        this.rec3Type = request.rec3Type();
+        this.rec3Score = request.rec3Score();
+        this.rec3Reason = request.rec3Reason();
+        this.rec3Way = request.rec3Way();
     }
 }
