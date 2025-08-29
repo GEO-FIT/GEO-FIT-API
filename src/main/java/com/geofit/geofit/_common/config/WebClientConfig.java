@@ -10,7 +10,7 @@ public class WebClientConfig {
     @Bean
     public WebClient aiWebClient(WebClient.Builder builder) {
         return builder
-            .baseUrl("http://192.168.126.195:5000")
+            .baseUrl("https://bf3d785c82d5.ngrok-free.app")
             .build();
     }
 }

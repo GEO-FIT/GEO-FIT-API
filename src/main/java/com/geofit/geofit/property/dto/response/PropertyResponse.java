@@ -30,7 +30,7 @@ public record PropertyResponse(
     String demand,
     String environment,
     String rec1Type,
-    Integer re1Score,
+    Integer rec1Score,
     String rec1Reason,
     String rec1Way,
     String rec2Type,

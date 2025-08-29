@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.geofit.geofit.property.domain.Dong;
@@ -17,6 +18,7 @@ import com.geofit.geofit.property.domain.PropertyType;
 import com.geofit.geofit.property.dto.request.PropertyCreateRequest;
 import com.geofit.geofit.property.dto.request.PropertyUpdateAnalyzeRequest;
 import com.geofit.geofit.property.dto.request.PropertyUpdateRequest;
+import com.geofit.geofit.property.dto.response.PropertiesResponse;
 import com.geofit.geofit.property.dto.response.PropertyResponse;
 import com.geofit.geofit.property.service.PropertyService;
 
@@ -34,6 +36,21 @@ public class PropertyController {
         @PathVariable Integer propertyId
     ) {
         PropertyResponse response = propertyService.getProperty(propertyId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<PropertiesResponse> getProperties(
+        @RequestParam(required = false) Integer dongId,
+        @RequestParam(required = false) Integer floorId,
+        @RequestParam(required = false) Integer minRent,
+        @RequestParam(required = false) Integer maxRent,
+        @RequestParam(required = false) Integer minArea,
+        @RequestParam(required = false) Integer maxArea
+    ) {
+        PropertiesResponse response = propertyService.getProperties(
+            dongId, floorId, minRent, maxRent, minArea, maxArea
+        );
         return ResponseEntity.ok(response);
     }
 
