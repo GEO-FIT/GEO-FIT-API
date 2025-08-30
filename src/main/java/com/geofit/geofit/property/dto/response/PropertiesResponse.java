@@ -11,6 +11,7 @@ public record PropertiesResponse(
 
     public record InnerPropertyResponse(
         Integer propertyId,
+        String image,
         String dong,
         String floor,
         String propertyType,
@@ -28,6 +29,7 @@ public record PropertiesResponse(
         private static InnerPropertyResponse from(Property property) {
             return new InnerPropertyResponse(
                 property.getId(),
+                property.getImages().get(0).getUrl(),
                 property.getDong().getName(),
                 property.getFloor().getName(),
                 property.getType().getName(),

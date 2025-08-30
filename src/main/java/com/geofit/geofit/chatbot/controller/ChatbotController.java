@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.geofit.geofit._common.client.dto.response.TestResponse;
 import com.geofit.geofit.chatbot.domain.Session;
 import com.geofit.geofit.chatbot.dto.request.MessageRequest;
 import com.geofit.geofit.chatbot.dto.response.MessageResponse;
@@ -51,6 +52,12 @@ public class ChatbotController {
         @RequestBody MessageRequest request
     ) {
         MessageResponse response = chatbotService.createMessage(sessionId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<TestResponse> isHealthy() {
+        TestResponse response = chatbotService.isHealthy();
         return ResponseEntity.ok(response);
     }
 }

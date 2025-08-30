@@ -1,5 +1,6 @@
 package com.geofit.geofit.chatbot.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,7 @@ import com.geofit.geofit._common.client.dto.request.AiChatbotRequest;
 import com.geofit.geofit._common.client.dto.request.SessionNameRequest;
 import com.geofit.geofit._common.client.dto.response.AiChatbotResponse;
 import com.geofit.geofit._common.client.dto.response.SessionNameResponse;
+import com.geofit.geofit._common.client.dto.response.TestResponse;
 import com.geofit.geofit.chatbot.domain.Message;
 import com.geofit.geofit.chatbot.domain.Session;
 import com.geofit.geofit.chatbot.dto.request.MessageRequest;
@@ -18,6 +20,10 @@ import com.geofit.geofit.chatbot.dto.response.MessageResponse;
 import com.geofit.geofit.chatbot.dto.response.MessagesResponse;
 import com.geofit.geofit.chatbot.repository.MessageRepository;
 import com.geofit.geofit.chatbot.repository.SessionRepository;
+import com.geofit.geofit.property.domain.Dong;
+import com.geofit.geofit.property.domain.Property;
+import com.geofit.geofit.property.repository.DongRepository;
+import com.geofit.geofit.property.repository.PropertyRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +34,8 @@ public class ChatbotService {
 
     private final MessageRepository messageRepository;
     private final SessionRepository sessionRepository;
+    private final PropertyRepository propertyRepository;
+    private final DongRepository dongRepository;
     private final AiClient aiClient;
 
     public List<Session> getSessions() {
@@ -76,6 +84,11 @@ public class ChatbotService {
             request.content()
         );
         AiChatbotResponse aiResponse = aiClient.chatbot(aiRequest);
+        Dong dong = dongRepository.findByName(aiResponse.dong()).orElse(null);
+        List<Property> properties = propertyRepository.findTop3ByDongAndRec1TypeOrderByRec1ScoreDesc(dong, aiResponse.category());
+        List<Integer> ids = properties.stream()
+            .map(Property::getId)
+            .collect(Collectors.toList());
 
         Message botMessage = Message.builder()
             .session(session)
@@ -84,6 +97,10 @@ public class ChatbotService {
             .build();
         messageRepository.save(botMessage);
 
-        return MessageResponse.from(aiResponse);
+        return MessageResponse.from(aiResponse, ids);
+    }
+
+    public TestResponse isHealthy() {
+        return TestResponse.from();
     }
 }

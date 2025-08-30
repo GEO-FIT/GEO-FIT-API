@@ -10,7 +10,7 @@ public class WebClientConfig {
     @Bean
     public WebClient aiWebClient(WebClient.Builder builder) {
         return builder
-            .baseUrl("https://bf3d785c82d5.ngrok-free.app")
+            .baseUrl("https://a777216691e1.ngrok-free.app")
             .build();
     }
 }

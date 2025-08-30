@@ -27,4 +27,8 @@ public class PropertySpecification {
     public static Specification<Property> areaLessThanOrEqualTo(Integer maxArea) {
         return (root, query, cb) -> maxArea == null ? null : cb.lessThanOrEqualTo(root.get("area"), maxArea);
     }
+
+    public static Specification<Property> hasType(String type) {
+        return (root, query, cb) -> type == null || type.isEmpty() ? null : cb.equal(root.get("rec1_type"), type);
+    }
 }
